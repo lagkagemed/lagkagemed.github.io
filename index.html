@@ -5,160 +5,119 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sol.fo</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="./OBJLoader.js"></script>
-    <script src="./MTLLoader.js"></script>
-    <script src="./FontLoader.js"></script>
-    <script src="./TextGeometry.js"></script>
     <style>
-        body {
-            overflow: hidden; /* Hide scrollbars */
+        * {
             margin: 0;
-            position: fixed;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: bold;
+        }
+
+        body {
+            display: flex;
+            /* justify-content: center;
+            align-items: center; */
+        }
+
+        .title {
+            position: absolute;
+            width: 100%;
+            margin-top: 5%;
+        }
+
+        .title img {
+            display: block;
+            width: 90%;
+            margin: auto auto;
+        }
+
+        .circle {
+            position: absolute;
+            top: -60%;
+            left: 14%;
+            width: 36%;
+            height: 36vw;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo {
+            position: absolute;
+            width: 20vw;
+            height: 20vw;
+            background: url(sol3.svg);
+            background-size: cover;
+            border-radius: 50%;
+        }
+
+        .text {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            color: #ffd714;
+            animation: rotateText 10s linear infinite;
+        }
+
+        @keyframes rotateText {
+            0% {
+                transform: rotate(360deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
+
+        .text span {
+            position: absolute;
+            left: 50%;
+            font-size: 5vw;
+            transform-origin: 0 18vw;
+        }
+
+        @media only screen and (min-width: 1000px) {
+            .title {
+                width: 1000px;
+                margin: 50px 0;
+                left: calc(50% - 500px);
+            }
+
+            .circle {
+                height: 360px;
+            }
+
+            .logo {
+                width: 200px;
+                height: 200px;
+            }
+
+            .text span {
+                left: 50%;
+                font-size: 50px;
+                transform-origin: 0 180px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="title">
+        <img src="sol4.svg" alt="sol.fo">
+        <div class="circle">
+            <div class="logo"></div>
+            <div class="text">
+                <p>|||||||||||||||</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        const scene = new THREE.Scene();
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-        scene.add(ambientLight);
-
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-        dirLight.position.set(100, -300, 400);
-        dirLight.castShadow = true; // default false
-        scene.add(dirLight);
-
-        let aspectRatio = window.innerWidth / window.innerHeight;
-        let cameraWidth = 150;
-
-        console.log(aspectRatio)
-        
-        const cameraHeight = cameraWidth / aspectRatio;
-
-        const camera = new THREE.OrthographicCamera(
-            cameraWidth / -2,
-            cameraWidth / 2,
-            cameraHeight / 2,
-            cameraHeight / -2,
-            0,
-            1000
-        );
-        camera.lookAt(0, 0, 0);
-        let yPos = 10 + (( 10 - (22.77/aspectRatio)) * -2.7)
-        camera.position.set(yPos, 30, 50);
-        //camera.rotation.set(0, 0, Math.PI/2)
-        camera.rotation.set(-0.3, 0, Math.PI/2)
-        camera.up.set(0, 0, 1);
-
-        
-        const box = new THREE.Mesh(
-            new THREE.BoxBufferGeometry(1000, 1000, 1),
-            new THREE.MeshLambertMaterial({color: 0xFFFFFF})
-        );
-        box.receiveShadow = true;
-
-        scene.add(box);
-        
-
-        const renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.render(scene, camera);
-
-        document.body.appendChild(renderer.domElement);
-
-        // instantiate a loader
-        //const loader = new THREE.OBJLoader();
-
-        const onProgress = function ( xhr ) {
-
-            if ( xhr.lengthComputable ) {
-
-                const percentComplete = xhr.loaded / xhr.total * 100;
-                console.log( Math.round( percentComplete, 2 ) + '% downloaded' );
-
-            }
-
-        };
-
-        const MTLloader = new THREE.MTLLoader()
-		
-        MTLloader.load( 'head.mtl', function ( materials ) {
-
-						materials.preload();
-
-						new THREE.OBJLoader()
-							.setMaterials( materials )
-							.load( 'head.obj', function ( object ) {
-
-                                object.castShadow = true;
-								scene.add( object );
-                                renderer.render(scene, camera);
-
-							}, onProgress );
-
-		} );
-
-        const Fontloader = new THREE.FontLoader();
-
-        Fontloader.load( 'Cascadia.json', function ( font ) {
-
-            let textGeo = new THREE.TextGeometry( 'S  l.fo', {
-                font: font,
-                size: 20,
-                height: 6,
-                curveSegments: 12,
-                bevelEnabled: false,
-                bevelThickness: 1,
-                bevelSize: 1,
-                bevelOffset: 0,
-                bevelSegments: 5
-            } );
-
-            const text = new THREE.Mesh(
-                textGeo,
-                new THREE.MeshLambertMaterial({color: 0xffca09})
-            );
-
-            text.rotation.set(0, 0, Math.PI/2)
-            text.position.set(0, -42, 0);
-
-            scene.add(text);
-
-            renderer.render(scene, camera);
-        } );
-
-                    /*
-
-        // load a resource
-        loader.load(
-            // resource URL
-            'head.obj',
-            // called when resource is loaded
-            function ( object ) {
-
-                console.log(object);
-                scene.add( object );
-                renderer.render(scene, camera);
-
-            },
-            // called when loading is in progresses
-            function ( xhr ) {
-
-                console.log( ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
-
-            },
-            // called when loading has errors
-            function ( error ) {
-                console.log(error)
-                console.log( 'An error happened' );
-
-            }
-        );
-        */
+        let text = document.querySelector('.text p');
+        text.innerHTML = text.innerText.split("").map(
+            (char, i) =>
+            `<span style="transform:rotate(${i * 24}deg)">${char}</span>`
+            ).join("")
     </script>
 </body>
 </html>
