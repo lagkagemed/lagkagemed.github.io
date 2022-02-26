@@ -1,0 +1,61 @@
+.circle {
+    position: absolute;
+}
+
+.text {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #ffd714;
+    animation: rotateText 10s linear infinite;
+}
+
+@keyframes rotateText {
+    0% {
+        transform: rotate(360deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+.text span {
+    position: absolute;
+}
+
+
+@media only screen and (min-width: 1000px) {
+    .logo {
+        margin-top: 50px;
+        width: 900px;
+    }
+    .text span {
+        transform-origin: 0 170px;
+        font-size: 60px;
+        left: calc(-180px + 56%);
+        margin-top: -90px;
+    }
+    .circle {
+        width: 340px;
+        height: 340px;
+    }
+}
+
+@media only screen and (max-width: 999px) {
+    .logo {
+        margin-top: 5vw;
+        width: 90%;
+    }
+    .text span {
+        transform-origin: 0 17vw;
+        font-size: 6vw;
+        left: 36%;
+        margin-top: -10%;
+    }
+    .circle {
+        width: 34vw;
+        height: 34vw;
+    }
+}
