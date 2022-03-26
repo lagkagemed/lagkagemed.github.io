@@ -8,18 +8,29 @@
     <link rel="stylesheet" href="/index.css">
 </head>
 <body>
-    <div class="title">
-        <img src="sol4.svg" alt="sol.fo">
-        <div class="circle">
-            <div class="logo"></div>
-            <div class="text">
-                <p>|||||||||||||||</p>
+    <div id="div-main" class="div" style="display: block; left: 50vw;">
+        <div class="title">
+            <img src="sol4.svg" alt="sol.fo">
+            <div class="circle">
+                <div class="logo"></div>
+                <div class="text">
+                    <p>|||||||||||||||</p>
+                </div>
             </div>
         </div>
+        <div class="buttons">
+            <img src="solbokhald2.svg" alt="Bókhald" onclick="fadeIn('bok', 'main');">
+            <img src="solkt2.svg" alt="KT" onclick="fadeIn('kt', 'main');">
+            <img src="solUm2.svg" alt="Um okkum" onclick="fadeIn('um', 'main');">
+        </div>
     </div>
-    <div class="buttons">
+    <div id="div-bok" class="div">
         <img src="solbokhald2.svg" alt="Bókhald">
+    </div>
+    <div id="div-kt" class="div">
         <img src="solkt2.svg" alt="KT">
+    </div>
+    <div id="div-um" class="div">
         <img src="solUm2.svg" alt="Um okkum">
     </div>
 
@@ -29,6 +40,40 @@
             (char, i) =>
             `<span style="transform:rotate(${i * 24}deg)">${char}</span>`
             ).join("")
+
+        let hide = {};
+        hide.main = false;
+        hide.bok = false;
+        hide.kt = false;
+        hide.um = false;
+        
+        function closeAllDiv() {
+            hide.main = false;
+            hide.bok = false;
+            hide.kt = false;
+            hide.um = false;
+            let divArr = document.getElementsByClassName('div')
+            for (let i = 0; i < divArr.length; i++) {
+                divArr[i].style.display = 'none';
+            }
+        }
+            
+        document.getElementById('div-main').addEventListener('animationend', () => {
+            if (hide.main) {
+                document.getElementById('div-main').style.display = 'none';
+            }
+        });
+
+        function fadeIn(div, divOut) {
+            closeAllDiv();
+            let thisDiv = document.getElementById('div-' + div)
+            let outDiv = document.getElementById('div-' + divOut)
+            thisDiv.style.display = 'block';
+            outDiv.style.display = 'block';
+            thisDiv.style.animation="fadeIn 2s ease-out";
+            outDiv.style.animation="fadeOut 1s ease-in";
+            hide[divOut] = true;
+        }
     </script>
 </body>
 </html>
